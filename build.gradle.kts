@@ -5,6 +5,7 @@ plugins {
 	id("org.springframework.boot") version "3.5.11"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("com.diffplug.spotless") version "8.3.0"
+	id("com.github.spotbugs") version "6.4.8"
 }
 
 group = "com.jiwoo"
@@ -64,5 +65,13 @@ tasks.jacocoTestReport {
 		xml.required = true
 		html.required = true
 		csv.required = false
+	}
+}
+
+tasks.spotbugsMain {
+	reports.create("html") {
+		required = true
+		outputLocation = file("$buildDir/reports/spotbugs/main/spotbugs.html")
+		setStylesheet("fancy-hist.xsl")
 	}
 }
