@@ -1,6 +1,7 @@
 plugins {
 	java
 	war
+	jacoco
 	id("org.springframework.boot") version "3.5.11"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("com.diffplug.spotless") version "8.3.0"
@@ -23,6 +24,10 @@ configurations {
 
 repositories {
 	mavenCentral()
+}
+
+jacoco {
+	toolVersion = "0.8.14"
 }
 
 spotless {
@@ -50,4 +55,14 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+	dependsOn(tasks.test)
+	reports {
+		xml.required = true
+		html.required = true
+		csv.required = false
+	}
 }
