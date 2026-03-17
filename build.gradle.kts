@@ -3,6 +3,7 @@ plugins {
 	war
 	id("org.springframework.boot") version "3.5.11"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("com.diffplug.spotless") version "8.3.0"
 }
 
 group = "com.jiwoo"
@@ -22,6 +23,16 @@ configurations {
 
 repositories {
 	mavenCentral()
+}
+
+spotless {
+	java {
+		target("src/*/java/**/*.java")
+		googleJavaFormat()
+		removeUnusedImports()
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
 }
 
 dependencies {
