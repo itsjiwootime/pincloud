@@ -1,8 +1,11 @@
 plugins {
 	java
 	war
+	jacoco
 	id("org.springframework.boot") version "3.5.11"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("com.diffplug.spotless") version "8.3.0"
+	id("com.github.spotbugs") version "6.4.8"
 }
 
 group = "com.jiwoo"
@@ -24,6 +27,20 @@ repositories {
 	mavenCentral()
 }
 
+jacoco {
+	toolVersion = "0.8.14"
+}
+
+spotless {
+	java {
+		target("src/*/java/**/*.java")
+		googleJavaFormat()
+		removeUnusedImports()
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
+}
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -39,4 +56,35 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+	dependsOn(tasks.test)
+	reports {
+		xml.required = true
+		html.required = true
+		csv.required = false
+	}
+}
+
+tasks.jacocoTestCoverageVerification {
+	dependsOn(tasks.test)
+	violationRules {
+		rule {
+			limit {
+				counter = "LINE"
+				value = "COVEREDRATIO"
+				minimum = "0.15".toBigDecimal()
+			}
+		}
+	}
+}
+
+tasks.spotbugsMain {
+	reports.create("html") {
+		required = true
+		outputLocation = file("$buildDir/reports/spotbugs/main/spotbugs.html")
+		setStylesheet("fancy-hist.xsl")
+	}
 }
