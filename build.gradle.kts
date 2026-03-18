@@ -68,6 +68,19 @@ tasks.jacocoTestReport {
 	}
 }
 
+tasks.jacocoTestCoverageVerification {
+	dependsOn(tasks.test)
+	violationRules {
+		rule {
+			limit {
+				counter = "LINE"
+				value = "COVEREDRATIO"
+				minimum = "0.15".toBigDecimal()
+			}
+		}
+	}
+}
+
 tasks.spotbugsMain {
 	reports.create("html") {
 		required = true

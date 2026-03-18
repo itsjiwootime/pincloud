@@ -34,7 +34,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Run format check, SpotBugs, tests, coverage, and build JAR
-        run: ./gradlew --no-daemon spotlessCheck spotbugsMain test jacocoTestReport bootJar
+        run: ./gradlew --no-daemon spotlessCheck spotbugsMain test jacocoTestReport jacocoTestCoverageVerification bootJar
 
       - name: Upload test reports on failure
         if: failure()
