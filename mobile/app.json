@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "LinkMap",
+    "slug": "linkmap",
+    "scheme": "linkmap",
+    "orientation": "portrait",
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": [
+          "kakaomap"
+        ]
+      }
+    },
+    "android": {
+      "package": "com.jiwoo.pincloud.linkmap"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
