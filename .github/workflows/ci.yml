@@ -45,13 +45,6 @@ jobs:
             build/reports/tests/test
             build/test-results/test
 
-      - name: Upload JAR artifact
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v4
-        with:
-          name: pincloud-jar
-          path: build/libs/*.jar
-
       - name: Upload JaCoCo report
         if: always()
         uses: actions/upload-artifact@v4
@@ -59,10 +52,16 @@ jobs:
           name: jacoco-report
           path: build/reports/jacoco/test
 
-
       - name: Upload SpotBugs report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: spotbugs-report
           path: build/reports/spotbugs
+
+      - name: Upload JAR artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pincloud-jar
+          path: build/libs/*.jar

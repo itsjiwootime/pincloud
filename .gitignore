@@ -35,3 +35,16 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Environment ###
+.env
+mobile/.env
+
+### Local Artifacts ###
+.DS_Store
+**/.DS_Store
+.gradle-home/
+.gradle-local/
+.kkirikkiri/
+mobile/node_modules/
+mobile/.expo/
