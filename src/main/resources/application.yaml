@@ -36,7 +36,7 @@ kakao:
   place-search-url: https://dapi.kakao.com/v2/local/search/keyword.json
 
 openai:
-  api-key: ${OPENAI_API_KEY}
+  api-key: ${OPENAI_API_KEY:test-openai-api-key}
   model: gpt-4o-mini
   base-url: https://api.openai.com/v1
 

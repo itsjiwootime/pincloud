@@ -33,6 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(properties = {
+        "openai.api-key=test-openai-api-key",
+        "openai.base-url=https://api.openai.com/v1",
+        "openai.model=gpt-4o-mini",
         "jwt.secret=testSecretKeyForIntegrationTestsShouldBeLongEnough12345",
         "jwt.access-expiration=3600000",
         "jwt.refresh-expiration=604800000"

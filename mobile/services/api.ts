@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 
 import { AUTH_STORAGE_KEYS, API_BASE_URL } from "../constants/config";
@@ -13,7 +13,7 @@ let unauthorizedHandler: null | (() => Promise<void> | void) = null;
 let isHandlingUnauthorized = false;
 
 api.interceptors.request.use(async (config) => {
-  const token = await AsyncStorage.getItem(AUTH_STORAGE_KEYS.jwtToken);
+  const token = await SecureStore.getItemAsync(AUTH_STORAGE_KEYS.jwtToken);
 
   if (token) {
     config.headers = config.headers ?? {};
