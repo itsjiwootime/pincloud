@@ -81,7 +81,7 @@ public class OpenAiClient {
       @Value("${openai.model}") String model,
       ObjectMapper objectMapper) {
     this.model = model;
-    this.objectMapper = objectMapper;
+    this.objectMapper = objectMapper.copy();
     this.webClient =
         WebClient.builder()
             .baseUrl(baseUrl)
@@ -95,20 +95,20 @@ public class OpenAiClient {
 
     Map<String, Object> requestBody =
         Map.of(
-            "model", model,
+            "model",
+            model,
             "messages",
-                List.of(
-                    Map.of("role", "system", "content", SYSTEM_PROMPT),
-                    Map.of("role", "user", "content", userContent)),
+            List.of(
+                Map.of("role", "system", "content", SYSTEM_PROMPT),
+                Map.of("role", "user", "content", userContent)),
             "response_format",
-                Map.of(
-                    "type", "json_schema",
-                    "json_schema",
-                        Map.of(
-                            "name", "place_extraction_result",
-                            "strict", true,
-                            "schema", parseSchema())),
-            "temperature", 0.1);
+            Map.of(
+                "type",
+                "json_schema",
+                "json_schema",
+                Map.of("name", "place_extraction_result", "strict", true, "schema", parseSchema())),
+            "temperature",
+            0.1);
 
     try {
       JsonNode response =
@@ -142,7 +142,8 @@ public class OpenAiClient {
     }
     if (description != null && !description.isBlank()) {
       // 토큰 절약: 설명은 500자로 제한
-      String desc = description.length() > 500 ? description.substring(0, 500) + "..." : description;
+      String desc =
+          description.length() > 500 ? description.substring(0, 500) + "..." : description;
       sb.append("설명: ").append(desc);
     }
     return sb.toString();
@@ -172,10 +173,7 @@ public class OpenAiClient {
         }
       }
 
-      return LlmExtractionResult.builder()
-          .contentType(contentType)
-          .candidates(candidates)
-          .build();
+      return LlmExtractionResult.builder().contentType(contentType).candidates(candidates).build();
 
     } catch (Exception e) {
       log.error("Failed to parse LLM response: {}", e.getMessage());

@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LinkExtractController {
 
-    private final LinkExtractService linkExtractService;
+  private final LinkExtractService linkExtractService;
 
-    @PostMapping("/extract")
-    public ResponseEntity<ApiResponse<LinkExtractResult>> extract(@Valid @RequestBody LinkExtractRequest request) {
-        SecurityUtils.getCurrentUserId();
-        LinkExtractResult result = linkExtractService.extract(request.url());
-        return ResponseEntity.ok(ApiResponse.ok(result));
-    }
+  @PostMapping("/extract")
+  public ResponseEntity<ApiResponse<LinkExtractResult>> extract(
+      @Valid @RequestBody LinkExtractRequest request) {
+    SecurityUtils.getCurrentUserId();
+    LinkExtractResult result = linkExtractService.extract(request.url());
+    return ResponseEntity.ok(ApiResponse.ok(result));
+  }
 }

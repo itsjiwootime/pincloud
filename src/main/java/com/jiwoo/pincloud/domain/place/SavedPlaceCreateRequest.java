@@ -12,28 +12,23 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SavedPlaceCreateRequest {
 
-    @NotBlank
-    private String name;
+  @NotBlank private String name;
 
-    @NotBlank
-    private String address;
+  @NotBlank private String address;
 
-    @NotNull
-    private Double latitude;
+  @NotNull private Double latitude;
 
-    @NotNull
-    private Double longitude;
+  @NotNull private Double longitude;
 
-    private String memo;
+  private String memo;
 
-    private Long categoryId;
+  private Long categoryId;
 
-    @NotBlank
-    private String originalUrl;
+  @NotBlank private String originalUrl;
 
-    private Platform platform;
+  private Platform platform;
 
-    private String title;
+  private String title;
 
-    private String thumbnailUrl;
+  private String thumbnailUrl;
 }

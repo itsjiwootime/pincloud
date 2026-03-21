@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class OgTagResult {
 
-    private String title;
-    private String description;
-    private String thumbnailUrl;
+  private String title;
+  private String description;
+  private String thumbnailUrl;
 }

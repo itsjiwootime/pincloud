@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,8 +16,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "users")
 @Getter
@@ -24,43 +23,41 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+  @Column(nullable = false, unique = true)
+  private String email;
 
-    @Column(nullable = false)
-    private String nickname;
+  @Column(nullable = false)
+  private String nickname;
 
-    @Column
-    private String password;
+  @Column private String password;
 
-    @Column
-    private String kakaoId;
+  @Column private String kakaoId;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+  @CreatedDate
+  @Column(nullable = false, updatable = false)
+  private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
+  @LastModifiedDate
+  @Column(nullable = false)
+  private LocalDateTime updatedAt;
 
-    @Builder
-    public User(String email, String nickname, String password, String kakaoId) {
-        this.email = email;
-        this.nickname = nickname;
-        this.password = password;
-        this.kakaoId = kakaoId;
-    }
+  @Builder
+  public User(String email, String nickname, String password, String kakaoId) {
+    this.email = email;
+    this.nickname = nickname;
+    this.password = password;
+    this.kakaoId = kakaoId;
+  }
 
-    public void updateNickname(String nickname) {
-        this.nickname = nickname;
-    }
+  public void updateNickname(String nickname) {
+    this.nickname = nickname;
+  }
 
-    public void linkKakaoAccount(String kakaoId) {
-        this.kakaoId = kakaoId;
-    }
+  public void linkKakaoAccount(String kakaoId) {
+    this.kakaoId = kakaoId;
+  }
 }

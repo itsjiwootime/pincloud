@@ -9,9 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SavedPlaceUpdateRequest {
 
-    private Long categoryId;
+  private Long categoryId;
 
-    private String memo;
+  private String memo;
 
-    private VisitStatus visitStatus;
+  private VisitStatus visitStatus;
 }

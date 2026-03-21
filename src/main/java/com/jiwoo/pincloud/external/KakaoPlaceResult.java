@@ -7,9 +7,9 @@ import lombok.Getter;
 @Builder
 public class KakaoPlaceResult {
 
-    private String name;
-    private String address;
-    private Double latitude;
-    private Double longitude;
-    private String category;
+  private String name;
+  private String address;
+  private Double latitude;
+  private Double longitude;
+  private String category;
 }
