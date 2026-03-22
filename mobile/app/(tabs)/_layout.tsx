@@ -1,6 +1,7 @@
 import { Redirect, Tabs } from "expo-router";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 
+import { COLORS, RADII, SHADOWS } from "../../constants/theme";
 import { useAuth } from "../../stores/authStore";
 
 export default function TabsLayout() {
@@ -22,12 +23,30 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#111827",
-        tabBarInactiveTintColor: "#6B7280",
+        sceneStyle: {
+          backgroundColor: COLORS.sand,
+        },
+        tabBarActiveTintColor: COLORS.ink,
+        tabBarInactiveTintColor: COLORS.inkMuted,
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "700",
+        },
         tabBarStyle: {
-          height: 62,
-          paddingBottom: 8,
-          paddingTop: 8,
+          position: "absolute",
+          left: 14,
+          right: 14,
+          bottom: 14,
+          height: 72,
+          paddingBottom: 10,
+          paddingTop: 10,
+          paddingHorizontal: 10,
+          borderRadius: RADII.lg,
+          borderTopWidth: 0,
+          borderWidth: 1,
+          borderColor: COLORS.line,
+          backgroundColor: "rgba(255,249,239,0.96)",
+          ...SHADOWS.floating,
         },
       }}
     >
@@ -43,6 +62,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#F8FAFC",
+    backgroundColor: COLORS.sand,
   },
 });

@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useIsFocused } from "@react-navigation/native";
 
 import { DEFAULT_PIN_COLOR, INITIAL_REGION } from "../../constants/config";
+import { COLORS, DISPLAY_FONT_FAMILY, RADII, SHADOWS } from "../../constants/theme";
 import { getErrorMessage } from "../../services/api";
 import { getSavedPlacesByBbox } from "../../services/places";
 import { useCategories } from "../../stores/categoryStore";
@@ -109,6 +110,20 @@ export default function MapScreen() {
       </MapView>
 
       <View style={styles.overlay}>
+        <View style={styles.heroCard}>
+          <View style={styles.heroTextBlock}>
+            <Text style={styles.heroEyebrow}>FIELD VIEW</Text>
+            <Text style={styles.heroTitle}>지금 보고 있는 지도 범위에서 저장 장소를 바로 훑어보세요.</Text>
+          </View>
+
+          <View style={styles.heroFooter}>
+            <Text style={styles.heroMeta}>{visiblePlaces.length}개의 핀</Text>
+            <Pressable style={styles.heroAction} onPress={() => router.push("/link-input")}>
+              <Text style={styles.heroActionLabel}>링크 추가</Text>
+            </Pressable>
+          </View>
+        </View>
+
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -157,10 +172,12 @@ export default function MapScreen() {
         </ScrollView>
 
         <View style={styles.summaryCard}>
-          <Text style={styles.summaryTitle}>현재 지도 범위</Text>
-          <Text style={styles.summaryValue}>{visiblePlaces.length}개의 핀</Text>
+          <Text style={styles.summaryTitle}>필터 요약</Text>
+          <Text style={styles.summaryValue}>
+            {selectedCategoryId === null ? "전체 카테고리" : "선택 카테고리"} · {visiblePlaces.length}곳
+          </Text>
           {isLoadingPlaces || isLoadingCategories ? (
-            <ActivityIndicator size="small" color="#2563EB" />
+            <ActivityIndicator size="small" color={COLORS.teal} />
           ) : null}
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
         </View>
@@ -176,58 +193,106 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E5E7EB",
+    backgroundColor: COLORS.sand,
   },
   overlay: {
     paddingHorizontal: 16,
-    paddingTop: 12,
+    paddingTop: 14,
     gap: 12,
+  },
+  heroCard: {
+    borderRadius: RADII.xl,
+    padding: 18,
+    backgroundColor: "rgba(255,249,239,0.94)",
+    borderWidth: 1,
+    borderColor: "rgba(216,205,186,0.9)",
+    gap: 14,
+    ...SHADOWS.card,
+  },
+  heroTextBlock: {
+    gap: 8,
+  },
+  heroEyebrow: {
+    color: COLORS.accentDeep,
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 1.2,
+  },
+  heroTitle: {
+    color: COLORS.ink,
+    fontSize: 24,
+    lineHeight: 30,
+    fontWeight: "700",
+    fontFamily: DISPLAY_FONT_FAMILY,
+  },
+  heroFooter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  heroMeta: {
+    color: COLORS.inkMuted,
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  heroAction: {
+    borderRadius: RADII.pill,
+    backgroundColor: COLORS.ink,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+  heroActionLabel: {
+    color: COLORS.white,
+    fontSize: 13,
+    fontWeight: "700",
   },
   chipsContent: {
     gap: 8,
     paddingRight: 16,
   },
   chip: {
-    borderRadius: 999,
+    borderRadius: RADII.pill,
     paddingHorizontal: 14,
     paddingVertical: 10,
-    backgroundColor: "rgba(255,255,255,0.92)",
+    backgroundColor: "rgba(255,253,248,0.92)",
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   chipSelected: {
-    backgroundColor: "#111827",
-    borderColor: "#111827",
+    backgroundColor: COLORS.ink,
+    borderColor: COLORS.ink,
   },
   chipLabel: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#111827",
+    color: COLORS.ink,
   },
   chipLabelSelected: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   summaryCard: {
     alignSelf: "flex-start",
-    borderRadius: 18,
+    borderRadius: RADII.lg,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: "rgba(255,255,255,0.94)",
+    backgroundColor: "rgba(20,33,61,0.9)",
     gap: 4,
     maxWidth: "88%",
+    ...SHADOWS.card,
   },
   summaryTitle: {
-    color: "#64748B",
+    color: "rgba(255,255,255,0.72)",
     fontSize: 12,
     fontWeight: "600",
   },
   summaryValue: {
-    color: "#0F172A",
+    color: COLORS.white,
     fontSize: 18,
     fontWeight: "700",
   },
   errorText: {
-    color: "#B91C1C",
+    color: COLORS.accentSoft,
     fontSize: 13,
     fontWeight: "500",
   },
@@ -236,12 +301,12 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   calloutTitle: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 15,
     fontWeight: "700",
   },
   calloutLink: {
-    color: "#2563EB",
+    color: COLORS.teal,
     fontSize: 13,
     fontWeight: "600",
   },
@@ -251,20 +316,16 @@ const styles = StyleSheet.create({
     bottom: 28,
     width: 60,
     height: 60,
-    borderRadius: 20,
-    backgroundColor: "#111827",
+    borderRadius: 22,
+    backgroundColor: COLORS.accent,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#111827",
-    shadowOpacity: 0.24,
-    shadowOffset: { width: 0, height: 10 },
-    shadowRadius: 18,
-    elevation: 5,
+    ...SHADOWS.floating,
   },
   fabLabel: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 28,
-    fontWeight: "500",
+    fontWeight: "700",
     marginTop: -2,
   },
 });

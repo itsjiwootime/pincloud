@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useIsFocused } from "@react-navigation/native";
 
+import { COLORS, DISPLAY_FONT_FAMILY, RADII, SHADOWS } from "../../constants/theme";
 import {
   createCategory as createCategoryRequest,
   deleteCategory as deleteCategoryRequest,
@@ -130,9 +131,12 @@ export default function SettingsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.hero}>
-          <Text style={styles.title}>설정</Text>
-          <Text style={styles.subtitle}>카테고리를 관리하고 계정 세션을 정리할 수 있습니다.</Text>
+        <View style={styles.heroCard}>
+          <Text style={styles.kicker}>SYSTEM</Text>
+          <Text style={styles.title}>지도에 쌓이는 분류 기준을 직접 다듬으세요.</Text>
+          <Text style={styles.subtitle}>
+            카테고리 색과 이름을 정리하고, 지금 세션을 안전하게 마무리할 수 있습니다.
+          </Text>
         </View>
 
         <View style={styles.card}>
@@ -169,7 +173,7 @@ export default function SettingsScreen() {
             onPress={() => void handleCreateCategory()}
           >
             {isSubmitting ? (
-              <ActivityIndicator color="#FFFFFF" />
+              <ActivityIndicator color={COLORS.white} />
             ) : (
               <Text style={styles.primaryButtonLabel}>카테고리 추가</Text>
             )}
@@ -178,7 +182,7 @@ export default function SettingsScreen() {
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>카테고리 목록</Text>
-          {isLoading ? <ActivityIndicator size="small" color="#2563EB" /> : null}
+          {isLoading ? <ActivityIndicator size="small" color={COLORS.teal} /> : null}
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
           {categories.length === 0 && !isLoading ? (
@@ -214,7 +218,7 @@ export default function SettingsScreen() {
                     onPress={() => void handleSaveEdit()}
                   >
                     {isSavingEdit ? (
-                      <ActivityIndicator size="small" color="#FFFFFF" />
+                      <ActivityIndicator size="small" color={COLORS.white} />
                     ) : (
                       <Text style={styles.editSaveLabel}>저장</Text>
                     )}
@@ -273,53 +277,68 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: COLORS.sand,
   },
   content: {
     padding: 20,
     gap: 16,
-    paddingBottom: 40,
+    paddingBottom: 110,
   },
-  hero: {
-    gap: 8,
+  heroCard: {
+    gap: 10,
+    borderRadius: RADII.xl,
+    padding: 20,
+    backgroundColor: "rgba(255,249,239,0.94)",
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    ...SHADOWS.card,
+  },
+  kicker: {
+    color: COLORS.teal,
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 1.2,
   },
   title: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 30,
     fontWeight: "700",
+    lineHeight: 38,
+    fontFamily: DISPLAY_FONT_FAMILY,
   },
   subtitle: {
-    color: "#475569",
+    color: COLORS.inkMuted,
     fontSize: 15,
-    lineHeight: 22,
+    lineHeight: 24,
   },
   card: {
     gap: 14,
-    borderRadius: 22,
-    backgroundColor: "#FFFFFF",
+    borderRadius: RADII.lg,
+    backgroundColor: "rgba(255,253,248,0.96)",
     padding: 18,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.line,
+    ...SHADOWS.card,
   },
   cardTitle: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 18,
     fontWeight: "700",
   },
   input: {
-    borderRadius: 16,
-    backgroundColor: "#F8FAFC",
+    borderRadius: RADII.sm,
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.line,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 15,
-    color: "#0F172A",
+    color: COLORS.ink,
   },
   fieldLabel: {
-    color: "#334155",
+    color: COLORS.ink,
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   colorGrid: {
     flexDirection: "row",
@@ -329,22 +348,22 @@ const styles = StyleSheet.create({
   colorButton: {
     width: 38,
     height: 38,
-    borderRadius: 999,
+    borderRadius: RADII.pill,
     borderWidth: 2,
     borderColor: "transparent",
   },
   colorButtonSelected: {
-    borderColor: "#111827",
+    borderColor: COLORS.ink,
   },
   primaryButton: {
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 16,
-    backgroundColor: "#111827",
+    borderRadius: RADII.md,
+    backgroundColor: COLORS.accent,
     paddingVertical: 15,
   },
   primaryButtonLabel: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 15,
     fontWeight: "700",
   },
@@ -352,11 +371,11 @@ const styles = StyleSheet.create({
     opacity: 0.65,
   },
   errorText: {
-    color: "#B91C1C",
+    color: COLORS.danger,
     fontSize: 14,
   },
   emptyText: {
-    color: "#64748B",
+    color: COLORS.inkMuted,
     fontSize: 14,
   },
   categoryRow: {
@@ -364,8 +383,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: 12,
-    borderRadius: 16,
-    backgroundColor: "#F8FAFC",
+    borderRadius: RADII.sm,
+    backgroundColor: "rgba(244,239,226,0.72)",
     paddingHorizontal: 14,
     paddingVertical: 12,
   },
@@ -385,50 +404,50 @@ const styles = StyleSheet.create({
     borderRadius: 999,
   },
   categoryName: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 15,
     fontWeight: "600",
   },
   editChip: {
-    borderRadius: 999,
+    borderRadius: RADII.pill,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
-    backgroundColor: "#FFFFFF",
+    borderColor: COLORS.line,
+    backgroundColor: COLORS.white,
     paddingHorizontal: 12,
     paddingVertical: 8,
     minWidth: 52,
     alignItems: "center",
   },
   editChipLabel: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 13,
     fontWeight: "700",
   },
   deleteChip: {
-    borderRadius: 999,
+    borderRadius: RADII.pill,
     borderWidth: 1,
-    borderColor: "#FECACA",
-    backgroundColor: "#FEF2F2",
+    borderColor: "#F0B2A7",
+    backgroundColor: "#FCEAE6",
     paddingHorizontal: 12,
     paddingVertical: 8,
     minWidth: 52,
     alignItems: "center",
   },
   deleteChipLabel: {
-    color: "#B91C1C",
+    color: COLORS.danger,
     fontSize: 13,
     fontWeight: "700",
   },
   editRow: {
     gap: 10,
-    borderRadius: 16,
-    backgroundColor: "#F8FAFC",
+    borderRadius: RADII.sm,
+    backgroundColor: "rgba(244,239,226,0.72)",
     padding: 14,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: COLORS.line,
   },
   editNameInput: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
   },
   editActions: {
     flexDirection: "row",
@@ -438,12 +457,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 12,
-    backgroundColor: "#111827",
+    borderRadius: RADII.sm,
+    backgroundColor: COLORS.ink,
     paddingVertical: 12,
   },
   editSaveLabel: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 14,
     fontWeight: "700",
   },
@@ -451,28 +470,28 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 12,
+    borderRadius: RADII.sm,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
-    backgroundColor: "#FFFFFF",
+    borderColor: COLORS.line,
+    backgroundColor: COLORS.white,
     paddingVertical: 12,
   },
   editCancelLabel: {
-    color: "#334155",
+    color: COLORS.inkMuted,
     fontSize: 14,
     fontWeight: "600",
   },
   logoutButton: {
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 18,
+    borderRadius: RADII.md,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
-    backgroundColor: "#FFFFFF",
+    borderColor: COLORS.line,
+    backgroundColor: "rgba(255,255,255,0.8)",
     paddingVertical: 16,
   },
   logoutButtonLabel: {
-    color: "#111827",
+    color: COLORS.ink,
     fontSize: 15,
     fontWeight: "700",
   },
