@@ -15,6 +15,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useIsFocused } from "@react-navigation/native";
 
+import { COLORS, DISPLAY_FONT_FAMILY, RADII, SHADOWS } from "../constants/theme";
 import { getErrorMessage } from "../services/api";
 import { extractLink, saveLinkedPlace } from "../services/links";
 import { useAuth } from "../stores/authStore";
@@ -63,7 +64,7 @@ export default function LinkInputScreen() {
   if (!isHydrated) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#111827" />
+        <ActivityIndicator size="large" color={COLORS.ink} />
       </SafeAreaView>
     );
   }
@@ -212,11 +213,25 @@ export default function LinkInputScreen() {
         keyboardShouldPersistTaps="handled"
         ListHeaderComponent={
           <View style={styles.headerContent}>
-            <View style={styles.hero}>
-              <Text style={styles.title}>링크 입력</Text>
+            <View style={styles.heroCard}>
+              <Text style={styles.kicker}>LINK CAPTURE</Text>
+              <Text style={styles.title}>링크를 붙여 넣고 저장 가능한 장소 후보로 정리하세요.</Text>
               <Text style={styles.subtitle}>
-                URL을 붙여넣으면 장소 후보를 추출하고 카테고리와 메모를 붙여 저장할 수 있습니다.
+                게시글, 블로그, 지도 링크에서 장소 후보를 추출한 뒤 카테고리와 메모를 붙여 바로 지도에
+                저장할 수 있습니다.
               </Text>
+
+              <View style={styles.heroPills}>
+                <View style={styles.heroPill}>
+                  <Text style={styles.heroPillLabel}>Extract</Text>
+                </View>
+                <View style={styles.heroPill}>
+                  <Text style={styles.heroPillLabel}>Review</Text>
+                </View>
+                <View style={styles.heroPill}>
+                  <Text style={styles.heroPillLabel}>Save</Text>
+                </View>
+              </View>
             </View>
 
             <View style={styles.sectionCard}>
@@ -225,6 +240,7 @@ export default function LinkInputScreen() {
                 value={url}
                 onChangeText={setUrl}
                 placeholder="https://example.com/post"
+                placeholderTextColor={COLORS.inkMuted}
                 autoCapitalize="none"
                 keyboardType="url"
                 autoCorrect={false}
@@ -244,7 +260,7 @@ export default function LinkInputScreen() {
                 onPress={() => void handleExtract()}
               >
                 {isExtracting ? (
-                  <ActivityIndicator color="#FFFFFF" />
+                  <ActivityIndicator color={COLORS.white} />
                 ) : (
                   <Text style={styles.primaryLabel}>장소 찾기</Text>
                 )}
@@ -259,6 +275,9 @@ export default function LinkInputScreen() {
                   {result.platform} · {result.contentType}
                 </Text>
                 <Text style={styles.resultUrl}>{result.originalUrl}</Text>
+                <View style={styles.resultBadge}>
+                  <Text style={styles.resultBadgeLabel}>{result.topCandidates.length}개 후보</Text>
+                </View>
 
                 <Text style={styles.fieldLabel}>카테고리</Text>
                 <ScrollView
@@ -291,7 +310,10 @@ export default function LinkInputScreen() {
                         key={category.id}
                         style={[
                           styles.categoryChip,
-                          isSelected && { backgroundColor: category.colorCode, borderColor: category.colorCode },
+                          isSelected && {
+                            backgroundColor: category.colorCode,
+                            borderColor: category.colorCode,
+                          },
                         ]}
                         onPress={() => setSelectedCategoryId(category.id)}
                       >
@@ -372,6 +394,12 @@ function CandidateCard({
 
   return (
     <View style={styles.candidateCard}>
+      <View
+        style={[
+          styles.candidateAccent,
+          { backgroundColor: candidate.kakaoMatched ? COLORS.teal : COLORS.accent },
+        ]}
+      />
       <View style={styles.candidateHeader}>
         <View style={styles.candidateTitleWrap}>
           <Text style={styles.candidateTitle}>{candidate.matchedName ?? override.name}</Text>
@@ -448,7 +476,7 @@ function CandidateCard({
         onPress={() => void onSave(candidate, index)}
       >
         {isSaving ? (
-          <ActivityIndicator color="#111827" />
+          <ActivityIndicator color={COLORS.white} />
         ) : (
           <Text style={styles.secondaryLabel}>저장</Text>
         )}
@@ -462,83 +490,115 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#F8FAFC",
+    backgroundColor: COLORS.sand,
   },
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: COLORS.sand,
   },
   content: {
     padding: 20,
-    paddingBottom: 40,
+    paddingBottom: 110,
   },
   headerContent: {
     gap: 16,
     marginBottom: 16,
   },
-  hero: {
-    gap: 8,
+  heroCard: {
+    gap: 12,
+    borderRadius: RADII.xl,
+    backgroundColor: "rgba(255,249,239,0.94)",
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    padding: 20,
+    ...SHADOWS.card,
+  },
+  kicker: {
+    color: COLORS.accentDeep,
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 1.2,
   },
   title: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 30,
     fontWeight: "700",
+    lineHeight: 38,
+    fontFamily: DISPLAY_FONT_FAMILY,
   },
   subtitle: {
-    color: "#475569",
+    color: COLORS.inkMuted,
     fontSize: 15,
-    lineHeight: 22,
+    lineHeight: 24,
+  },
+  heroPills: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  heroPill: {
+    borderRadius: RADII.pill,
+    backgroundColor: COLORS.tealSoft,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  heroPillLabel: {
+    color: COLORS.teal,
+    fontSize: 12,
+    fontWeight: "700",
   },
   sectionCard: {
     gap: 12,
-    borderRadius: 22,
-    backgroundColor: "#FFFFFF",
+    borderRadius: RADII.lg,
+    backgroundColor: "rgba(255,253,248,0.96)",
     padding: 18,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.line,
+    ...SHADOWS.card,
   },
   sectionTitle: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 18,
     fontWeight: "700",
   },
   fieldLabel: {
-    color: "#334155",
+    color: COLORS.ink,
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   input: {
-    borderRadius: 16,
-    backgroundColor: "#F8FAFC",
+    borderRadius: RADII.sm,
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.line,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 15,
-    color: "#0F172A",
+    color: COLORS.ink,
   },
   memoInput: {
     minHeight: 92,
     textAlignVertical: "top",
   },
   helperText: {
-    color: "#2563EB",
+    color: COLORS.teal,
     fontSize: 13,
     fontWeight: "600",
   },
   errorText: {
-    color: "#B91C1C",
+    color: COLORS.danger,
     fontSize: 14,
   },
   primaryButton: {
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 16,
-    backgroundColor: "#111827",
+    borderRadius: RADII.md,
+    backgroundColor: COLORS.accentDeep,
     paddingVertical: 16,
+    ...SHADOWS.card,
   },
   primaryLabel: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 15,
     fontWeight: "700",
   },
@@ -546,59 +606,74 @@ const styles = StyleSheet.create({
     opacity: 0.65,
   },
   resultTitle: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 22,
     fontWeight: "700",
   },
   resultMeta: {
-    color: "#2563EB",
+    color: COLORS.accentDeep,
     fontSize: 13,
     fontWeight: "700",
   },
   resultUrl: {
-    color: "#334155",
+    color: COLORS.inkMuted,
     fontSize: 13,
     lineHeight: 20,
+  },
+  resultBadge: {
+    alignSelf: "flex-start",
+    borderRadius: RADII.pill,
+    backgroundColor: COLORS.paper,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  resultBadgeLabel: {
+    color: COLORS.ink,
+    fontSize: 12,
+    fontWeight: "700",
   },
   categoryContent: {
     gap: 8,
     paddingRight: 12,
   },
   categoryChip: {
-    borderRadius: 999,
+    borderRadius: RADII.pill,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
-    backgroundColor: "#FFFFFF",
+    borderColor: COLORS.line,
+    backgroundColor: COLORS.white,
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
   categoryChipSelected: {
-    backgroundColor: "#111827",
-    borderColor: "#111827",
+    backgroundColor: COLORS.ink,
+    borderColor: COLORS.ink,
   },
   categoryChipLabel: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 13,
     fontWeight: "600",
   },
   categoryChipLabelSelected: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   emptyState: {
-    borderRadius: 22,
-    backgroundColor: "#FFFFFF",
+    borderRadius: RADII.lg,
+    backgroundColor: "rgba(255,253,248,0.96)",
     padding: 20,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.line,
     gap: 8,
+    ...SHADOWS.card,
   },
   emptyTitle: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 17,
     fontWeight: "700",
   },
   emptySubtitle: {
-    color: "#475569",
+    color: COLORS.inkMuted,
     fontSize: 14,
     lineHeight: 21,
   },
@@ -607,46 +682,59 @@ const styles = StyleSheet.create({
   },
   candidateCard: {
     gap: 12,
-    borderRadius: 20,
-    backgroundColor: "#FFFFFF",
+    borderRadius: RADII.lg,
+    backgroundColor: "rgba(255,253,248,0.98)",
     padding: 18,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.line,
+    overflow: "hidden",
+    ...SHADOWS.card,
+  },
+  candidateAccent: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    width: 6,
   },
   candidateHeader: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
     gap: 10,
   },
   candidateTitleWrap: {
+    flex: 1,
     gap: 4,
   },
   candidateTitle: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 18,
     fontWeight: "700",
   },
   candidateMeta: {
-    color: "#64748B",
+    color: COLORS.inkMuted,
     fontSize: 13,
   },
   candidateBody: {
-    color: "#334155",
+    color: COLORS.ink,
     fontSize: 14,
     lineHeight: 21,
   },
   matchBadge: {
-    alignSelf: "flex-start",
-    borderRadius: 999,
+    borderRadius: RADII.pill,
     paddingHorizontal: 10,
     paddingVertical: 6,
+    marginTop: 2,
   },
   matchBadgeOn: {
-    backgroundColor: "#DCFCE7",
+    backgroundColor: COLORS.tealSoft,
   },
   matchBadgeOff: {
-    backgroundColor: "#FDE68A",
+    backgroundColor: "#F7DFC0",
   },
   matchBadgeLabel: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 11,
     fontWeight: "700",
   },
@@ -662,21 +750,19 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   coordinateText: {
-    color: "#475569",
+    color: COLORS.inkMuted,
     fontSize: 13,
     fontWeight: "600",
   },
   secondaryButton: {
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: "#CBD5E1",
-    backgroundColor: "#FFFFFF",
+    borderRadius: RADII.md,
+    backgroundColor: COLORS.ink,
     paddingVertical: 14,
   },
   secondaryLabel: {
-    color: "#111827",
+    color: COLORS.white,
     fontSize: 14,
     fontWeight: "700",
   },

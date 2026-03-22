@@ -15,6 +15,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useIsFocused } from "@react-navigation/native";
 
+import { COLORS, DISPLAY_FONT_FAMILY, RADII, SHADOWS } from "../../constants/theme";
 import { getErrorMessage } from "../../services/api";
 import { deleteSavedPlace, getSavedPlace, updateSavedPlace } from "../../services/places";
 import { useAuth } from "../../stores/authStore";
@@ -43,7 +44,7 @@ export default function PlaceDetailScreen() {
   if (!isHydrated) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#111827" />
+        <ActivityIndicator size="large" color={COLORS.ink} />
       </SafeAreaView>
     );
   }
@@ -213,7 +214,7 @@ export default function PlaceDetailScreen() {
   if (isLoading) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#111827" />
+        <ActivityIndicator size="large" color={COLORS.ink} />
       </SafeAreaView>
     );
   }
@@ -235,6 +236,7 @@ export default function PlaceDetailScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.hero}>
+          <Text style={styles.heroEyebrow}>PLACE NOTE</Text>
           <Text style={styles.title}>{place.name}</Text>
           <Text style={styles.address}>{place.address}</Text>
 
@@ -257,7 +259,7 @@ export default function PlaceDetailScreen() {
               onPress={() => void handleToggleVisitStatus()}
             >
               {isSubmitting ? (
-                <ActivityIndicator color="#FFFFFF" />
+                <ActivityIndicator color={COLORS.white} />
               ) : (
                 <Text style={styles.primaryActionLabel}>
                   {place.visitStatus === "WANT" ? "방문 완료로 변경" : "가고 싶어요로 변경"}
@@ -404,7 +406,7 @@ export default function PlaceDetailScreen() {
             onPress={handleDelete}
           >
             {isDeleting ? (
-              <ActivityIndicator color="#B91C1C" />
+              <ActivityIndicator color={COLORS.danger} />
             ) : (
               <Text style={[styles.footerButtonLabel, styles.deleteLabel]}>삭제</Text>
             )}
@@ -418,34 +420,43 @@ export default function PlaceDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: COLORS.sand,
   },
   loadingContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#F8FAFC",
+    backgroundColor: COLORS.sand,
     paddingHorizontal: 24,
     gap: 12,
   },
   content: {
     padding: 20,
     gap: 16,
-    paddingBottom: 40,
+    paddingBottom: 110,
   },
   hero: {
-    borderRadius: 24,
-    backgroundColor: "#0F172A",
+    borderRadius: RADII.xl,
+    backgroundColor: COLORS.ink,
     padding: 24,
     gap: 12,
+    ...SHADOWS.floating,
+  },
+  heroEyebrow: {
+    color: COLORS.sun,
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 1.2,
   },
   title: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 28,
     fontWeight: "700",
+    lineHeight: 36,
+    fontFamily: DISPLAY_FONT_FAMILY,
   },
   address: {
-    color: "#CBD5E1",
+    color: "rgba(255,255,255,0.76)",
     fontSize: 15,
     lineHeight: 22,
   },
@@ -455,28 +466,29 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   statusBadge: {
-    borderRadius: 999,
-    backgroundColor: "#1D4ED8",
+    borderRadius: RADII.pill,
+    backgroundColor: COLORS.accent,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
   statusLabel: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 12,
     fontWeight: "700",
   },
   categoryBadge: {
-    borderRadius: 999,
+    borderRadius: RADII.pill,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
   categoryLabel: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 12,
     fontWeight: "700",
   },
   heroActions: {
     flexDirection: "row",
+    alignItems: "stretch",
     gap: 10,
     marginTop: 4,
   },
@@ -484,26 +496,28 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 16,
-    backgroundColor: "#2563EB",
+    borderRadius: RADII.md,
+    backgroundColor: COLORS.accent,
     paddingVertical: 15,
   },
   primaryActionLabel: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 14,
     fontWeight: "700",
   },
   secondaryAction: {
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 16,
+    minWidth: 104,
+    borderRadius: RADII.md,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.18)",
     backgroundColor: "rgba(255,255,255,0.08)",
     paddingHorizontal: 18,
+    paddingVertical: 15,
   },
   secondaryActionLabel: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 14,
     fontWeight: "700",
   },
@@ -511,12 +525,13 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   section: {
-    borderRadius: 20,
-    backgroundColor: "#FFFFFF",
+    borderRadius: RADII.lg,
+    backgroundColor: "rgba(255,253,248,0.98)",
     padding: 18,
     gap: 12,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.line,
+    ...SHADOWS.card,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -525,46 +540,48 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   sectionTitle: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 16,
     fontWeight: "700",
   },
   sectionBody: {
-    color: "#334155",
+    color: COLORS.ink,
     fontSize: 14,
     lineHeight: 22,
   },
   thumbnail: {
     width: "100%",
     height: 220,
-    borderRadius: 18,
-    backgroundColor: "#E2E8F0",
+    borderRadius: RADII.md,
+    backgroundColor: COLORS.line,
   },
   linkButton: {
     gap: 6,
-    borderRadius: 16,
-    backgroundColor: "#F8FAFC",
-    padding: 14,
+    borderRadius: RADII.md,
+    backgroundColor: COLORS.paper,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   linkPlatform: {
-    color: "#2563EB",
+    color: COLORS.teal,
     fontSize: 12,
     fontWeight: "700",
   },
   linkUrl: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 14,
     lineHeight: 20,
   },
   editToggleButton: {
-    borderRadius: 999,
+    borderRadius: RADII.pill,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: COLORS.line,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
   editToggleLabel: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 13,
     fontWeight: "600",
   },
@@ -572,19 +589,19 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   fieldLabel: {
-    color: "#334155",
+    color: COLORS.ink,
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   input: {
-    borderRadius: 16,
-    backgroundColor: "#F8FAFC",
+    borderRadius: RADII.sm,
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.line,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 15,
-    color: "#0F172A",
+    color: COLORS.ink,
   },
   memoInput: {
     minHeight: 96,
@@ -596,40 +613,40 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   categoryChip: {
-    borderRadius: 999,
+    borderRadius: RADII.pill,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
-    backgroundColor: "#FFFFFF",
+    borderColor: COLORS.line,
+    backgroundColor: COLORS.white,
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
   categoryChipSelected: {
-    backgroundColor: "#111827",
-    borderColor: "#111827",
+    backgroundColor: COLORS.ink,
+    borderColor: COLORS.ink,
   },
   categoryChipLabel: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 13,
     fontWeight: "600",
   },
   categoryChipLabelSelected: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   primaryEditButton: {
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 16,
-    backgroundColor: "#111827",
+    borderRadius: RADII.md,
+    backgroundColor: COLORS.accent,
     paddingVertical: 15,
     marginTop: 4,
   },
   primaryEditLabel: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 14,
     fontWeight: "700",
   },
   metaText: {
-    color: "#64748B",
+    color: COLORS.inkMuted,
     fontSize: 13,
   },
   footerActions: {
@@ -640,39 +657,39 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 18,
+    borderRadius: RADII.md,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
-    backgroundColor: "#FFFFFF",
+    borderColor: COLORS.line,
+    backgroundColor: "rgba(255,255,255,0.82)",
     paddingVertical: 16,
   },
   footerButtonLabel: {
-    color: "#111827",
+    color: COLORS.ink,
     fontSize: 15,
     fontWeight: "700",
   },
   deleteButton: {
-    borderColor: "#FECACA",
-    backgroundColor: "#FEF2F2",
+    borderColor: "#F0B2A7",
+    backgroundColor: "#FCEAE6",
   },
   deleteLabel: {
-    color: "#B91C1C",
+    color: COLORS.danger,
   },
   errorText: {
-    color: "#B91C1C",
+    color: COLORS.danger,
     fontSize: 15,
     textAlign: "center",
   },
   retryButton: {
-    borderRadius: 16,
+    borderRadius: RADII.md,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
-    backgroundColor: "#FFFFFF",
+    borderColor: COLORS.line,
+    backgroundColor: COLORS.white,
     paddingHorizontal: 18,
     paddingVertical: 14,
   },
   retryLabel: {
-    color: "#0F172A",
+    color: COLORS.ink,
     fontSize: 14,
     fontWeight: "600",
   },
